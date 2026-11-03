@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Student Assistant</title>
+    <style>
+        :root {
+            --bg: #eef2f8;
+            --panel: #fff;
+            --ink: #14213d;
+            --muted: #5b6780;
+            --line: #d9e0ec;
+            --me: #14213d;
+            --meink: #fff;
+            --bot: #eaf0fa;
+            --hl: #ffd23f;
+            --hlink: #14213d;
+            --side: #14213d;
+            --sideink: #e8edf8;
+            box-sizing: border-box;
+            padding-top: env(safe-area-inset-top, 0px);
+            padding-bottom: env(safe-area-inset-bottom, 0px)
+        }
+
+        @media (prefers-color-scheme:dark) {
+            :root:not([data-theme="light"]) {
+                --bg: #0b1222;
+                --panel: #141f38;
+                --ink: #eef2fa;
+                --muted: #9aa7c2;
+                --line: #2a3856;
+                --me: #ffd23f;
+                --meink: #14213d;
+                --bot: #1d2b4a;
+                --side: #0f182d;
+                --sideink: #e8edf8
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0b1222;
+            --panel: #141f38;
+            --ink: #eef2fa;
+            --muted: #9aa7c2;
+            --line: #2a3856;
+            --me: #ffd23f;
+            --meink: #14213d;
+            --bot: #1d2b4a;
+            --side: #0f182d;
+            --sideink: #e8edf8
+        }
+
+        html {
+            scroll-padding-top: env(safe-area-inset-top, 0px)
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: inherit
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font: 16px/1.5 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center
+        }
+
+        .app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            background: var(--panel);
+            overflow: hidden
+        }
+
+        @media (min-width:900px) {
+            #log {
+                padding: 24px 8%
+            }
+
+            .chips,
+            form {
+                padding-left: 8%;
+                padding-right: 8%
+            }
+
+            .note {
+                padding: 0 8% 8px
+            }
+
+            header {
+                padding: 14px 8%
+            }
+        }
+
+        aside {
+            display: none;
+            width: 250px;
+            flex: none;
+            background: var(--side);
+            color: var(--sideink);
+            padding: 22px 16px;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        @media (min-width:900px) {
+            aside {
+                display: flex
+            }
+        }
+
+        aside h2 {
+            font-size: .9rem;
+            font-weight: 600;
+            margin: 18px 8px 6px;
+            opacity: .7
+        }
+
+        aside button {
+            all: unset;
+            cursor: pointer;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: .95rem
+        }
+
+        aside button:hover,
+        aside button:focus-visible {
+            background: rgba(255, 210, 63, .18)
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 0 8px
+        }
+
+        .brand b {
+            font-size: 1.1rem;
+            display: block
+        }
+
+        .brand span {
+            font-size: .8rem;
+            opacity: .7
+        }
+
+        .logo {
+            width: 42px;
+            height: 42px;
+            border-radius: 11px;
+            background: var(--hl);
+            color: var(--hlink);
+            display: grid;
+            place-items: center;
+            font-size: 1.35rem;
+            flex: none
+        }
+
+        .sp {
+            flex: 1
+        }
+
+        main {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column
+        }
+
+        header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            align-items: center;
+            gap: 12px
+        }
+
+        header .logo {
+            width: 36px;
+            height: 36px;
+            font-size: 1.1rem
+        }
+
+        @media (min-width:900px) {
+            header .logo {
+                display: none
+            }
+        }
+
+        header h1 {
+            font-size: 1.05rem;
+            margin: 0;
+            line-height: 1.2
+        }
+
+        header p {
+            margin: 0;
+            font-size: .8rem;
+            color: var(--muted)
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2fbf71;
+            margin-right: 5px
+        }
+
+        .tools {
+            margin-left: auto;
+            display: flex;
+            gap: 6px
+        }
+
+        .ib {
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink);
+            border-radius: 9px;
+            padding: 6px 10px;
+            font: inherit;
+            font-size: .82rem;
+            cursor: pointer
+        }
+
+        .ib:hover {
+            background: var(--bot)
+        }
+
+        #log {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth
+        }
+
+        .row {
+            display: flex;
+            flex-direction: column;
+            max-width: 92%
+        }
+
+        .row.me {
+            align-self: flex-end;
+            align-items: flex-end
+        }
+
+        .row.bot {
+            align-self: flex-start
+        }
+
+        @media (min-width:600px) {
+            .row {
+                max-width: 80%
+            }
+        }
+
+        .m {
+            padding: 10px 14px;
+            border-radius: 16px;
+            overflow-wrap: anywhere
+        }
+
+        .bot .m {
+            background: var(--bot);
+            border-bottom-left-radius: 4px
+        }
+
+        .me .m {
+            background: var(--me);
+            color: var(--meink);
+            border-bottom-right-radius: 4px
+        }
+
+        .m p {
+            margin: 0 0 6px;
+            white-space: pre-line
+        }
+
+        .m p:last-child {
+            margin: 0
+        }
+
+        .time {
+            font-size: .7rem;
+            color: var(--muted);
+            margin: 3px 6px 0
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 8px;
+            margin-top: 8px
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 10px 12px;
+            text-align: left;
+            font: inherit;
+            color: var(--ink);
+            cursor: pointer
+        }
+
+        .card:hover {
+            border-color: var(--hl);
+            box-shadow: 0 0 0 2px var(--hl)
+        }
+
+        .card b {
+            display: block;
+            font-size: .95rem
+        }
+
+        .card small {
+            color: var(--muted)
+        }
+
+        .tbl {
+            overflow-x: auto;
+            margin-top: 6px;
+            border-radius: 10px;
+            border: 1px solid var(--line);
+            background: var(--panel)
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: .88rem
+        }
+
+        td,
+        th {
+            padding: 7px 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+            white-space: nowrap
+        }
+
+        tr:last-child td {
+            border-bottom: 0
+        }
+
+        .steps {
+            list-style: none;
+            margin: 6px 0 0;
+            padding: 0
+        }
+
+        .steps li {
+            display: flex;
+            gap: 10px;
+            padding: 6px 0
+        }
+
+        .steps i {
+            flex: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--hl);
+            color: var(--hlink);
+            font-style: normal;
+            font-weight: 700;
+            font-size: .8rem;
+            display: grid;
+            place-items: center
+        }
+
+        .typing {
+            display: flex;
+            gap: 4px;
+            padding: 14px
+        }
+
+        .typing span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--muted);
+            animation: b 1s infinite
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: .15s
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: .3s
+        }
+
+        @keyframes b {
+
+            0%,
+            60%,
+            100% {
+                opacity: .3
+            }
+
+            30% {
+                opacity: 1
+            }
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .typing span {
+                animation: none
+            }
+
+            #log {
+                scroll-behavior: auto
+            }
+        }
+
+        .chips {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow-x: auto;
+            border-top: 1px solid var(--line);
+            scrollbar-width: none
+        }
+
+        .chips::-webkit-scrollbar {
+            display: none
+        }
+
+        .chips:empty {
+            display: none
+        }
+
+        .chips button {
+            flex: none;
+            border: 1.5px solid var(--ink);
+            background: transparent;
+            color: var(--ink);
+            padding: 6px 13px;
+            border-radius: 999px;
+            font: inherit;
+            font-size: .86rem;
+            cursor: pointer
+        }
+
+        .chips button:hover {
+            background: var(--hl);
+            border-color: var(--hl);
+            color: var(--hlink)
+        }
+
+        form {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px 14px
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            padding: 12px 14px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            font: inherit;
+            background: var(--bg);
+            color: var(--ink)
+        }
+
+        .send {
+            border: 0;
+            background: var(--hl);
+            color: var(--hlink);
+            font: inherit;
+            font-weight: 700;
+            padding: 0 20px;
+            border-radius: 12px;
+            cursor: pointer
+        }
+
+        button:focus-visible,
+        input:focus-visible {
+            outline: 3px solid var(--hl);
+            outline-offset: 2px
+        }
+
+        .note {
+            font-size: .72rem;
+            color: var(--muted);
+            text-align: center;
+            padding: 0 16px 8px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <aside>
+            <div class="brand">
+                <div class="logo">🎓</div>
+                <div><b>Student Assistant</b><span id="uni"></span></div>
+            </div>
+            <h2>Quick topics</h2>
+            <button data-q="Courses">📘 Courses</button>
+            <button data-q="Fees">💰 Fees</button>
+            <button data-q="How to apply">📝 Admission process</button>
+            <button data-q="Deadlines">📅 Deadlines</button>
+            <button data-q="Scholarships">🏅 Scholarships</button>
+            <button data-q="Documents required">📂 Documents</button>
+            <button data-q="Study tips">💡 Study tips</button>
+            <button data-q="Contact">📞 Contact</button>
+            <div class="sp"></div>
+        </aside>
+        <main>
+            <header>
+                <div class="logo">🎓</div>
+                <div>
+                    <h1>Student Assistant</h1>
+                    <p><span class="dot"></span>Online · replies instantly</p>
+                </div>
+                <div class="tools"><button class="ib" id="theme" type="button"
+                        aria-label="Toggle theme">🌓</button><button class="ib" id="clear" type="button">Clear</button>
+                </div>
+            </header>
+            <div id="log" aria-live="polite"></div>
+            <div class="chips" id="chips"></div>
+            <form id="f"><input id="q" placeholder="Ask about courses, fees, admission…" autocomplete="off"
+                    aria-label="Your question"><button class="send" type="submit">Send</button></form>
+            <div class="note">Demo information. Please confirm fees and dates with the admissions office.</div>
+        </main>
+    </div>
+    <script>
+        /* ===== EDIT THIS DATA to match your institute ===== */
+        var DATA = {
+            name: "ABC University",
+            courses: [
+                {n: "BS Computer Science", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Programming, algorithms, AI, databases and software development."},
+                {n: "BS Software Engineering", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Building, testing and maintaining large software systems."},
+                {n: "BS Data Science", d: "4 years", f: "Rs 100,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Statistics, machine learning and data analysis."},
+                {n: "BBA", d: "4 years", f: "Rs 85,000", req: "Intermediate (any group)", about: "Management, marketing, finance and entrepreneurship."},
+                {n: "MBA", d: "2 years", f: "Rs 110,000", req: "16 years of education", about: "Advanced business leadership and strategy."}
+            ],
+            open: "1 June – 15 August", test: "25 August", result: "1 September", classes: "15 September",
+            steps: ["Fill in the online form and upload your documents.", "Pay the application fee (Rs 3,000).", "Appear in the entry test (or submit SAT/NTS score).", "Check the merit list and collect your offer letter.", "Pay the first installment to confirm your seat."],
+            docs: ["CNIC / B-Form copy", "Matric and Intermediate marksheets", "4 passport-size photos", "Domicile certificate", "Character certificate"],
+            fee: {admission: "Rs 15,000 (one-time)", security: "Rs 10,000 (refundable)", inst: "Semester fee can be paid in 2 installments."},
+            schol: "Merit scholarships: 80%+ marks get 25% to 100% off tuition. Need-based financial aid is also available. Apply with the admission form.",
+            contact: {phone: "021-0000000", email: "admissions@abcuniversity.edu.pk", hours: "Mon–Fri, 9am–5pm", addr: "Karachi"}
+        };
+        var TIPS = ["Set a fixed 2-hour study slot every day and keep your phone away.", "Try the Pomodoro method: 25 minutes of study, then a 5-minute break.", "Write notes in your own words instead of copying.", "Solve past papers before exams to learn the pattern.", "Study the hardest topic first, while your mind is fresh.", "Sleep well. All-night study hurts memory more than it helps.", "Teach a topic to a friend. If you can explain it, you know it."];
+        var tipI = 0;
+        function hm() {return new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"})}
+        function P(t) {return {p: t}}
+        var INTENTS = [
+            {k: ["hello", "hi ", "hey", "salam", "good morning", "good evening", "start"], a: function () {return [P("Hello! 👋 I'm the " + DATA.name + " Student Assistant. What would you like to know?")]}, f: ["Courses", "Fees", "How to apply"]},
+            {k: ["course", "program", "degree", "bs ", "bba", "mba", "department", "study what", "offer", "major"], a: function () {return [P("Here are our programs. Tap one for details:"), {cards: DATA.courses}]}, f: ["Fees", "Eligibility", "How to apply"]},
+            {k: ["fee", "cost", "price", "tuition", "pay", "installment", "expensive", "charges"], a: function () {return [P("Yearly tuition by program:"), {tbl: [["Program", "Per year"]].concat(DATA.courses.map(function (c) {return [c.n, c.f]}))}, P("Admission fee: " + DATA.fee.admission + "\nSecurity: " + DATA.fee.security + "\n" + DATA.fee.inst)]}, f: ["Scholarships", "How to apply"]},
+            {k: ["scholarship", "financial aid", "waiver", "discount", "merit", "funding"], a: function () {return [P(DATA.schol)]}, f: ["Fees", "Deadlines"]},
+            {k: ["deadline", "last date", "date", "when", "schedule", "open", "test", "result", "entry test", "timeline"], a: function () {return [P("Key dates:"), {tbl: [["Event", "Date"], ["Admissions open", DATA.open], ["Entry test", DATA.test], ["Merit list / result", DATA.result], ["Classes start", DATA.classes]]}]}, f: ["How to apply", "Documents required"]},
+            {k: ["admission", "apply", "process", "how to", "form", "register", "enroll", "join", "procedure"], a: function () {return [P("Admission process:"), {steps: DATA.steps}]}, f: ["Documents required", "Deadlines", "Fees"]},
+            {k: ["document", "requirement", "paper", "certificate", "bring", "submit"], a: function () {return [P("Documents required:\n• " + DATA.docs.join("\n• "))]}, f: ["How to apply", "Eligibility"]},
+            {k: ["eligib", "criteria", "qualification", "marks", "percentage", "who can", "fsc", "a-level", "intermediate"], a: function () {return [P("Eligibility by program:"), {tbl: [["Program", "Requirement"]].concat(DATA.courses.map(function (c) {return [c.n, c.req]}))}]}, f: ["How to apply", "Scholarships"]},
+            {k: ["study", "tip", "exam", "prepare", "notes", "focus", "concentrate", "revise", "learn", "procrastinat"], a: function () {var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)]}, f: ["Another tip", "Courses"]},
+            {k: ["another tip", "more tip"], a: function () {var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)]}, f: ["Another tip", "Contact"]},
+            {k: ["contact", "phone", "email", "office", "address", "call", "number", "reach", "location", "timing", "hours"], a: function () {var c = DATA.contact; return [P("📞 " + c.phone + "\n✉️ " + c.email + "\n🕘 " + c.hours + "\n📍 " + c.addr)]}, f: ["Courses", "How to apply"]},
+            {k: ["thank", "thanks", "bye", "great", "ok thanks"], a: function () {return [P("You're welcome! Ask anytime. 😊")]}, f: ["Courses", "Fees"]}
+        ];
+        var log = document.getElementById("log"), q = document.getElementById("q"), chips = document.getElementById("chips");
+        document.getElementById("uni").textContent = DATA.name;
+        function el(t, c, x) {var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e}
+        function build(parts) {
+            var m = el("div", "m");
+            parts.forEach(function (p) {
+                if (p.p) {m.appendChild(el("p", "", p.p))}
+                if (p.tbl) {var w = el("div", "tbl"), t = el("table"); p.tbl.forEach(function (r, i) {var tr = el("tr"); r.forEach(function (c) {tr.appendChild(el(i ? "td" : "th", "", c))}); t.appendChild(tr)}); w.appendChild(t); m.appendChild(w)}
+                if (p.steps) {var ol = el("ol", "steps"); p.steps.forEach(function (s, i) {var li = el("li"); li.appendChild(el("i", "", i + 1)); li.appendChild(el("span", "", s)); ol.appendChild(li)}); m.appendChild(ol)}
+                if (p.cards) {var g = el("div", "cards"); p.cards.forEach(function (c) {var b = el("button", "card"); b.type = "button"; b.appendChild(el("b", "", c.n)); b.appendChild(el("small", "", c.d + " · " + c.f + "/yr")); b.onclick = function () {say(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req)}; g.appendChild(b)}); m.appendChild(g)}
+            }); return m
+        }
+        function addRow(side, node) {var r = el("div", "row " + side); r.appendChild(node); r.appendChild(el("div", "time", hm())); log.appendChild(r); log.scrollTop = log.scrollHeight; return r}
+        function say(t) {addRow("bot", build([P(t)]))}
+        function setChips(list) {chips.textContent = ""; list.forEach(function (c) {var b = el("button", "", c); b.type = "button"; b.onclick = function () {ask(c)}; chips.appendChild(b)})}
+        function match(text) {
+            var s = " " + text.toLowerCase() + " ", best = null, score = 0;
+            INTENTS.forEach(function (it) {var n = 0; it.k.forEach(function (k) {if (s.indexOf(k) > -1) n += k.length > 5 ? 2 : 1}); if (n > score) {score = n; best = it} });
+            if (!best) {var l = s.trim(); DATA.courses.forEach(function (c) {if (l.indexOf(c.n.toLowerCase()) > -1) best = {a: function () {return [P(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req)]}, f: ["Fees", "How to apply"]}})}
+            return best || {a: function () {return [P("Sorry, I couldn't find that. I can help with courses, fees, admission, deadlines, scholarships and study tips, or you can call " + DATA.contact.phone + ".")]}, f: ["Courses", "Fees", "How to apply", "Contact"]}
+        }
+        function ask(text) {
+            text = text.trim(); if (!text) return;
+            addRow("me", build([P(text)]));
+            var ty = el("div", "m typing"); ty.appendChild(el("span")); ty.appendChild(el("span")); ty.appendChild(el("span"));
+            var tr = el("div", "row bot"); tr.appendChild(ty); log.appendChild(tr); log.scrollTop = log.scrollHeight;
+            var it = match(text);
+            setTimeout(function () {tr.remove(); addRow("bot", build(it.a())); setChips(it.f)}, 500)
+        }
+        document.getElementById("f").addEventListener("submit", function (e) {e.preventDefault(); var v = q.value; q.value = ""; ask(v)});
+        document.querySelectorAll("aside button").forEach(function (b) {b.onclick = function () {ask(b.getAttribute("data-q"))}});
+        document.getElementById("clear").onclick = function () {log.textContent = ""; start()};
+        document.getElementById("theme").onclick = function () {var r = document.documentElement, d = r.getAttribute("data-theme"); var dark = d ? d === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.setAttribute("data-theme", dark ? "light" : "dark")};
+        function start() {addRow("bot", build([P("Hello! 👋 I'm the " + DATA.name + " Student Assistant."), P("Ask me about courses, fees, admissions, deadlines, scholarships or study tips. You can also pick a topic below.")])); setChips([])}
+        start();
+    </script>
+</body>
+
+</html>
