@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <title>Student Assistant</title>
+    <title>Admission Assistant</title>
     <style>
         :root {
             --bg: #eef2f8;
@@ -519,7 +519,7 @@
         <aside>
             <div class="brand">
                 <div class="logo">🎓</div>
-                <div><b>Student Assistant</b><span id="uni"></span></div>
+                <div><b>Admission Assistant</b><span id="uni"></span></div>
             </div>
             <h2>Quick topics</h2>
             <button data-q="Courses">📘 Courses</button>
@@ -536,7 +536,7 @@
             <header>
                 <div class="logo">🎓</div>
                 <div>
-                    <h1>Student Assistant</h1>
+                    <h1>Admission Assistant</h1>
                     <p><span class="dot"></span>Online · replies instantly</p>
                 </div>
                 <div class="tools"><button class="ib" id="theme" type="button"
@@ -555,57 +555,57 @@
         var DATA = {
             name: "ABC University",
             courses: [
-                {n: "BS Computer Science", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Programming, algorithms, AI, databases and software development."},
-                {n: "BS Software Engineering", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Building, testing and maintaining large software systems."},
-                {n: "BS Data Science", d: "4 years", f: "Rs 100,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Statistics, machine learning and data analysis."},
-                {n: "BBA", d: "4 years", f: "Rs 85,000", req: "Intermediate (any group)", about: "Management, marketing, finance and entrepreneurship."},
-                {n: "MBA", d: "2 years", f: "Rs 110,000", req: "16 years of education", about: "Advanced business leadership and strategy."}
+                { n: "BS Computer Science", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Programming, algorithms, AI, databases and software development." },
+                { n: "BS Software Engineering", d: "4 years", f: "Rs 95,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Building, testing and maintaining large software systems." },
+                { n: "BS Data Science", d: "4 years", f: "Rs 100,000", req: "FSc Pre-Engineering / ICS / A-Level", about: "Statistics, machine learning and data analysis." },
+                { n: "BBA", d: "4 years", f: "Rs 85,000", req: "Intermediate (any group)", about: "Management, marketing, finance and entrepreneurship." },
+                { n: "MBA", d: "2 years", f: "Rs 110,000", req: "16 years of education", about: "Advanced business leadership and strategy." }
             ],
             open: "1 June – 15 August", test: "25 August", result: "1 September", classes: "15 September",
             steps: ["Fill in the online form and upload your documents.", "Pay the application fee (Rs 3,000).", "Appear in the entry test (or submit SAT/NTS score).", "Check the merit list and collect your offer letter.", "Pay the first installment to confirm your seat."],
             docs: ["CNIC / B-Form copy", "Matric and Intermediate marksheets", "4 passport-size photos", "Domicile certificate", "Character certificate"],
-            fee: {admission: "Rs 15,000 (one-time)", security: "Rs 10,000 (refundable)", inst: "Semester fee can be paid in 2 installments."},
+            fee: { admission: "Rs 15,000 (one-time)", security: "Rs 10,000 (refundable)", inst: "Semester fee can be paid in 2 installments." },
             schol: "Merit scholarships: 80%+ marks get 25% to 100% off tuition. Need-based financial aid is also available. Apply with the admission form.",
-            contact: {phone: "021-0000000", email: "admissions@abcuniversity.edu.pk", hours: "Mon–Fri, 9am–5pm", addr: "Karachi"}
+            contact: { phone: "021-0000000", email: "admissions@abcuniversity.edu.pk", hours: "Mon–Fri, 9am–5pm", addr: "Karachi" }
         };
         var TIPS = ["Set a fixed 2-hour study slot every day and keep your phone away.", "Try the Pomodoro method: 25 minutes of study, then a 5-minute break.", "Write notes in your own words instead of copying.", "Solve past papers before exams to learn the pattern.", "Study the hardest topic first, while your mind is fresh.", "Sleep well. All-night study hurts memory more than it helps.", "Teach a topic to a friend. If you can explain it, you know it."];
         var tipI = 0;
-        function hm() {return new Date().toLocaleTimeString([], {hour: "numeric", minute: "2-digit"})}
-        function P(t) {return {p: t}}
+        function hm() { return new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) }
+        function P(t) { return { p: t } }
         var INTENTS = [
-            {k: ["hello", "hi ", "hey", "salam", "good morning", "good evening", "start"], a: function () {return [P("Hello! 👋 I'm the " + DATA.name + " Student Assistant. What would you like to know?")]}, f: ["Courses", "Fees", "How to apply"]},
-            {k: ["course", "program", "degree", "bs ", "bba", "mba", "department", "study what", "offer", "major"], a: function () {return [P("Here are our programs. Tap one for details:"), {cards: DATA.courses}]}, f: ["Fees", "Eligibility", "How to apply"]},
-            {k: ["fee", "cost", "price", "tuition", "pay", "installment", "expensive", "charges"], a: function () {return [P("Yearly tuition by program:"), {tbl: [["Program", "Per year"]].concat(DATA.courses.map(function (c) {return [c.n, c.f]}))}, P("Admission fee: " + DATA.fee.admission + "\nSecurity: " + DATA.fee.security + "\n" + DATA.fee.inst)]}, f: ["Scholarships", "How to apply"]},
-            {k: ["scholarship", "financial aid", "waiver", "discount", "merit", "funding"], a: function () {return [P(DATA.schol)]}, f: ["Fees", "Deadlines"]},
-            {k: ["deadline", "last date", "date", "when", "schedule", "open", "test", "result", "entry test", "timeline"], a: function () {return [P("Key dates:"), {tbl: [["Event", "Date"], ["Admissions open", DATA.open], ["Entry test", DATA.test], ["Merit list / result", DATA.result], ["Classes start", DATA.classes]]}]}, f: ["How to apply", "Documents required"]},
-            {k: ["admission", "apply", "process", "how to", "form", "register", "enroll", "join", "procedure"], a: function () {return [P("Admission process:"), {steps: DATA.steps}]}, f: ["Documents required", "Deadlines", "Fees"]},
-            {k: ["document", "requirement", "paper", "certificate", "bring", "submit"], a: function () {return [P("Documents required:\n• " + DATA.docs.join("\n• "))]}, f: ["How to apply", "Eligibility"]},
-            {k: ["eligib", "criteria", "qualification", "marks", "percentage", "who can", "fsc", "a-level", "intermediate"], a: function () {return [P("Eligibility by program:"), {tbl: [["Program", "Requirement"]].concat(DATA.courses.map(function (c) {return [c.n, c.req]}))}]}, f: ["How to apply", "Scholarships"]},
-            {k: ["study", "tip", "exam", "prepare", "notes", "focus", "concentrate", "revise", "learn", "procrastinat"], a: function () {var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)]}, f: ["Another tip", "Courses"]},
-            {k: ["another tip", "more tip"], a: function () {var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)]}, f: ["Another tip", "Contact"]},
-            {k: ["contact", "phone", "email", "office", "address", "call", "number", "reach", "location", "timing", "hours"], a: function () {var c = DATA.contact; return [P("📞 " + c.phone + "\n✉️ " + c.email + "\n🕘 " + c.hours + "\n📍 " + c.addr)]}, f: ["Courses", "How to apply"]},
-            {k: ["thank", "thanks", "bye", "great", "ok thanks"], a: function () {return [P("You're welcome! Ask anytime. 😊")]}, f: ["Courses", "Fees"]}
+            { k: ["hello", "hi ", "hey", "salam", "good morning", "good evening", "start"], a: function () { return [P("Hello! 👋 I'm the " + DATA.name + " Admission Assistant. What would you like to know?")] }, f: ["Courses", "Fees", "How to apply"] },
+            { k: ["course", "program", "degree", "bs ", "bba", "mba", "department", "study what", "offer", "major"], a: function () { return [P("Here are our programs. Tap one for details:"), { cards: DATA.courses }] }, f: ["Fees", "Eligibility", "How to apply"] },
+            { k: ["fee", "cost", "price", "tuition", "pay", "installment", "expensive", "charges"], a: function () { return [P("Yearly tuition by program:"), { tbl: [["Program", "Per year"]].concat(DATA.courses.map(function (c) { return [c.n, c.f] })) }, P("Admission fee: " + DATA.fee.admission + "\nSecurity: " + DATA.fee.security + "\n" + DATA.fee.inst)] }, f: ["Scholarships", "How to apply"] },
+            { k: ["scholarship", "financial aid", "waiver", "discount", "merit", "funding"], a: function () { return [P(DATA.schol)] }, f: ["Fees", "Deadlines"] },
+            { k: ["deadline", "last date", "date", "when", "schedule", "open", "test", "result", "entry test", "timeline"], a: function () { return [P("Key dates:"), { tbl: [["Event", "Date"], ["Admissions open", DATA.open], ["Entry test", DATA.test], ["Merit list / result", DATA.result], ["Classes start", DATA.classes]] }] }, f: ["How to apply", "Documents required"] },
+            { k: ["admission", "apply", "process", "how to", "form", "register", "enroll", "join", "procedure"], a: function () { return [P("Admission process:"), { steps: DATA.steps }] }, f: ["Documents required", "Deadlines", "Fees"] },
+            { k: ["document", "requirement", "paper", "certificate", "bring", "submit"], a: function () { return [P("Documents required:\n• " + DATA.docs.join("\n• "))] }, f: ["How to apply", "Eligibility"] },
+            { k: ["eligib", "criteria", "qualification", "marks", "percentage", "who can", "fsc", "a-level", "intermediate"], a: function () { return [P("Eligibility by program:"), { tbl: [["Program", "Requirement"]].concat(DATA.courses.map(function (c) { return [c.n, c.req] })) }] }, f: ["How to apply", "Scholarships"] },
+            { k: ["study", "tip", "exam", "prepare", "notes", "focus", "concentrate", "revise", "learn", "procrastinat"], a: function () { var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)] }, f: ["Another tip", "Courses"] },
+            { k: ["another tip", "more tip"], a: function () { var t = TIPS[tipI++ % TIPS.length]; return [P("💡 Study tip: " + t)] }, f: ["Another tip", "Contact"] },
+            { k: ["contact", "phone", "email", "office", "address", "call", "number", "reach", "location", "timing", "hours"], a: function () { var c = DATA.contact; return [P("📞 " + c.phone + "\n✉️ " + c.email + "\n🕘 " + c.hours + "\n📍 " + c.addr)] }, f: ["Courses", "How to apply"] },
+            { k: ["thank", "thanks", "bye", "great", "ok thanks"], a: function () { return [P("You're welcome! Ask anytime. 😊")] }, f: ["Courses", "Fees"] }
         ];
         var log = document.getElementById("log"), q = document.getElementById("q"), chips = document.getElementById("chips");
         document.getElementById("uni").textContent = DATA.name;
-        function el(t, c, x) {var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e}
+        function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e }
         function build(parts) {
             var m = el("div", "m");
             parts.forEach(function (p) {
-                if (p.p) {m.appendChild(el("p", "", p.p))}
-                if (p.tbl) {var w = el("div", "tbl"), t = el("table"); p.tbl.forEach(function (r, i) {var tr = el("tr"); r.forEach(function (c) {tr.appendChild(el(i ? "td" : "th", "", c))}); t.appendChild(tr)}); w.appendChild(t); m.appendChild(w)}
-                if (p.steps) {var ol = el("ol", "steps"); p.steps.forEach(function (s, i) {var li = el("li"); li.appendChild(el("i", "", i + 1)); li.appendChild(el("span", "", s)); ol.appendChild(li)}); m.appendChild(ol)}
-                if (p.cards) {var g = el("div", "cards"); p.cards.forEach(function (c) {var b = el("button", "card"); b.type = "button"; b.appendChild(el("b", "", c.n)); b.appendChild(el("small", "", c.d + " · " + c.f + "/yr")); b.onclick = function () {say(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req)}; g.appendChild(b)}); m.appendChild(g)}
+                if (p.p) { m.appendChild(el("p", "", p.p)) }
+                if (p.tbl) { var w = el("div", "tbl"), t = el("table"); p.tbl.forEach(function (r, i) { var tr = el("tr"); r.forEach(function (c) { tr.appendChild(el(i ? "td" : "th", "", c)) }); t.appendChild(tr) }); w.appendChild(t); m.appendChild(w) }
+                if (p.steps) { var ol = el("ol", "steps"); p.steps.forEach(function (s, i) { var li = el("li"); li.appendChild(el("i", "", i + 1)); li.appendChild(el("span", "", s)); ol.appendChild(li) }); m.appendChild(ol) }
+                if (p.cards) { var g = el("div", "cards"); p.cards.forEach(function (c) { var b = el("button", "card"); b.type = "button"; b.appendChild(el("b", "", c.n)); b.appendChild(el("small", "", c.d + " · " + c.f + "/yr")); b.onclick = function () { say(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req) }; g.appendChild(b) }); m.appendChild(g) }
             }); return m
         }
-        function addRow(side, node) {var r = el("div", "row " + side); r.appendChild(node); r.appendChild(el("div", "time", hm())); log.appendChild(r); log.scrollTop = log.scrollHeight; return r}
-        function say(t) {addRow("bot", build([P(t)]))}
-        function setChips(list) {chips.textContent = ""; list.forEach(function (c) {var b = el("button", "", c); b.type = "button"; b.onclick = function () {ask(c)}; chips.appendChild(b)})}
+        function addRow(side, node) { var r = el("div", "row " + side); r.appendChild(node); r.appendChild(el("div", "time", hm())); log.appendChild(r); log.scrollTop = log.scrollHeight; return r }
+        function say(t) { addRow("bot", build([P(t)])) }
+        function setChips(list) { chips.textContent = ""; list.forEach(function (c) { var b = el("button", "", c); b.type = "button"; b.onclick = function () { ask(c) }; chips.appendChild(b) }) }
         function match(text) {
             var s = " " + text.toLowerCase() + " ", best = null, score = 0;
-            INTENTS.forEach(function (it) {var n = 0; it.k.forEach(function (k) {if (s.indexOf(k) > -1) n += k.length > 5 ? 2 : 1}); if (n > score) {score = n; best = it} });
-            if (!best) {var l = s.trim(); DATA.courses.forEach(function (c) {if (l.indexOf(c.n.toLowerCase()) > -1) best = {a: function () {return [P(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req)]}, f: ["Fees", "How to apply"]}})}
-            return best || {a: function () {return [P("Sorry, I couldn't find that. I can help with courses, fees, admission, deadlines, scholarships and study tips, or you can call " + DATA.contact.phone + ".")]}, f: ["Courses", "Fees", "How to apply", "Contact"]}
+            INTENTS.forEach(function (it) { var n = 0; it.k.forEach(function (k) { if (s.indexOf(k) > -1) n += k.length > 5 ? 2 : 1 }); if (n > score) { score = n; best = it } });
+            if (!best) { var l = s.trim(); DATA.courses.forEach(function (c) { if (l.indexOf(c.n.toLowerCase()) > -1) best = { a: function () { return [P(c.n + ": " + c.about + "\nDuration: " + c.d + "\nFee: " + c.f + " per year\nEligibility: " + c.req)] }, f: ["Fees", "How to apply"] } }) }
+            return best || { a: function () { return [P("Sorry, I couldn't find that. I can help with courses, fees, admission, deadlines, scholarships and study tips, or you can call " + DATA.contact.phone + ".")] }, f: ["Courses", "Fees", "How to apply", "Contact"] }
         }
         function ask(text) {
             text = text.trim(); if (!text) return;
@@ -613,13 +613,13 @@
             var ty = el("div", "m typing"); ty.appendChild(el("span")); ty.appendChild(el("span")); ty.appendChild(el("span"));
             var tr = el("div", "row bot"); tr.appendChild(ty); log.appendChild(tr); log.scrollTop = log.scrollHeight;
             var it = match(text);
-            setTimeout(function () {tr.remove(); addRow("bot", build(it.a())); setChips(it.f)}, 500)
+            setTimeout(function () { tr.remove(); addRow("bot", build(it.a())); setChips(it.f) }, 500)
         }
-        document.getElementById("f").addEventListener("submit", function (e) {e.preventDefault(); var v = q.value; q.value = ""; ask(v)});
-        document.querySelectorAll("aside button").forEach(function (b) {b.onclick = function () {ask(b.getAttribute("data-q"))}});
-        document.getElementById("clear").onclick = function () {log.textContent = ""; start()};
-        document.getElementById("theme").onclick = function () {var r = document.documentElement, d = r.getAttribute("data-theme"); var dark = d ? d === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.setAttribute("data-theme", dark ? "light" : "dark")};
-        function start() {addRow("bot", build([P("Hello! 👋 I'm the " + DATA.name + " Student Assistant."), P("Ask me about courses, fees, admissions, deadlines, scholarships or study tips. You can also pick a topic below.")])); setChips([])}
+        document.getElementById("f").addEventListener("submit", function (e) { e.preventDefault(); var v = q.value; q.value = ""; ask(v) });
+        document.querySelectorAll("aside button").forEach(function (b) { b.onclick = function () { ask(b.getAttribute("data-q")) } });
+        document.getElementById("clear").onclick = function () { log.textContent = ""; start() };
+        document.getElementById("theme").onclick = function () { var r = document.documentElement, d = r.getAttribute("data-theme"); var dark = d ? d === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; r.setAttribute("data-theme", dark ? "light" : "dark") };
+        function start() { addRow("bot", build([P("Hello! 👋 I'm the " + DATA.name + " Admission Assistant."), P("Ask me about courses, fees, admissions, deadlines, scholarships or study tips. You can also pick a topic below.")])); setChips([]) }
         start();
     </script>
 </body>
